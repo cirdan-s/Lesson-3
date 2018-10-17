@@ -22,8 +22,8 @@ public class FirstTest {
         capabilites.setCapability("automationName","Appium");
         capabilites.setCapability("appPackage","org.wikipedia");
         capabilites.setCapability("appActivity",".main.MainActivity");
-        // capabilites.setCapability("app","/Users/apalnov/Desktop/Auto Mobile/Lesson 2/JavaAppiumAutomation/apks/org.wikipedia.apk"); // MacOS
-        capabilites.setCapability("app","E:\\Auto Mobile\\Lesson-2\\JavaAppiumAutomation\\apks\\org.wikipedia.apk"); // Windows
+        capabilites.setCapability("app","/Users/apalnov/Desktop/Auto Mobile/Lesson 2/JavaAppiumAutomation/apks/org.wikipedia.apk"); // MacOS
+        // capabilites.setCapability("app","E:\\Auto Mobile\\Lesson-2\\JavaAppiumAutomation\\apks\\org.wikipedia.apk"); // Windows
 
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilites);
     }
