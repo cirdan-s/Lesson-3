@@ -73,11 +73,6 @@ public class FirstTest {
                 "First search result is still present",
                 5);
 
-        waitForElementNotPresent(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Sports organization']"),
-                "Second search result is still present",
-                5);
-
     }
 
     private WebElement waitForElementPresent(By by, String errorMessage, long timeoutInSeconds) {
