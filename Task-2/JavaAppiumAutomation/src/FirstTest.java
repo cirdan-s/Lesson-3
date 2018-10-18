@@ -10,7 +10,10 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.lang.reflect.Array;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -44,24 +47,35 @@ public class FirstTest {
     @Test
     public void testCancelSearch() {
 
+        String searchString = "Navy";
+
         waitForElementAndClick(
-             By.id("org.wikipedia:id/search_container"),
-             "Cannot find 'search Wikipedia' input",
-             5);
+                By.id("org.wikipedia:id/search_container"),
+                "Cannot find 'search Wikipedia' input",
+                5);
 
         waitForElementAndSendKeys(
                 By.xpath("//*[contains(@text,'Search…')]"),
-                "Navy",
+                searchString,
                 "Cannot find search input",
                 5);
 
         waitForElementPresent(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Military branch of service primarily concerned with naval warfare']"),
-                "First search result is not found");
+                By.id("org.wikipedia:id/page_list_item_title"),
+                "Cannot find search results",
+                5);
 
-        waitForElementPresent(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Sports organization']"),
-                "Second search result is not found");
+        ArrayList<WebElement> elements = searchForElements(By.id("org.wikipedia:id/page_list_item_title"));
+
+//        if (elements.isEmpty()) { Assert.fail("No elements having " + searchString); }
+
+        System.out.println("Search returned: " + elements.size() + " articles with following headers");
+
+        for(WebElement element : elements) {
+
+            String title = element.getText();
+            System.out.println(title);
+        }
 
         waitForElementAndClick(
                 By.id("org.wikipedia:id/search_close_btn"),
@@ -69,11 +83,12 @@ public class FirstTest {
                 10);
 
         waitForElementNotPresent(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Military branch of service primarily concerned with naval warfare']"),
-                "First search result is still present",
+                By.id("org.wikipedia:id/page_list_item_title"),
+                "Search is not cleared yet",
                 5);
-
     }
+
+// Test methods
 
     private WebElement waitForElementPresent(By by, String errorMessage, long timeoutInSeconds) {
 
@@ -123,5 +138,15 @@ public class FirstTest {
         return element;
 
     }
+
+    private ArrayList<WebElement> searchForElements (By by) {
+
+
+        waitForElementPresent(by, "No elements were found", 20);
+        List<WebElement> elements = driver.findElements(by);
+        ArrayList<WebElement> result = new ArrayList<WebElement>(elements);
+        return result;
+    }
+
 
 }
