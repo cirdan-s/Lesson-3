@@ -66,7 +66,7 @@ public class FirstTest {
         waitForElementAndClick(
                 By.id("org.wikipedia:id/search_close_btn"),
                 "Cannot find X to cancel Search",
-                5);
+                10);
 
         waitForElementNotPresent(
                 By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='Military branch of service primarily concerned with naval warfare']"),
