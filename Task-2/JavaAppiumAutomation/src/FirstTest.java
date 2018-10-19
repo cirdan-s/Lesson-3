@@ -28,7 +28,7 @@ public class FirstTest {
 
         capabilites.setCapability("platformName", "Android");
         capabilites.setCapability("deviceName", "AndroidTestDevice");
-        capabilites.setCapability("platformVersion", "6.0");
+        capabilites.setCapability("platformVersion", "8.0");
         capabilites.setCapability("automationName", "Appium");
         capabilites.setCapability("appPackage", "org.wikipedia");
         capabilites.setCapability("appActivity", ".main.MainActivity");
@@ -82,10 +82,21 @@ public class FirstTest {
                 "Cannot find X to cancel Search",
                 10);
 
+/*        ArrayList<WebElement> elementsPresentAfterClear = searchForElements(By.id("org.wikipedia:id/page_list_item_title"));
+
+        System.out.println("\nSearch returned: " + elementsPresentAfterClear.size() + " articles with following headers");
+
+        for(WebElement element : elementsPresentAfterClear) {
+
+            String title = element.getText();
+            System.out.println(title);
+        }
+*/
+
         waitForElementNotPresent(
                 By.id("org.wikipedia:id/page_list_item_title"),
                 "Search is not cleared yet",
-                5);
+                15);
     }
 
 // Test methods
@@ -147,6 +158,5 @@ public class FirstTest {
         ArrayList<WebElement> result = new ArrayList<WebElement>(elements);
         return result;
     }
-
 
 }
