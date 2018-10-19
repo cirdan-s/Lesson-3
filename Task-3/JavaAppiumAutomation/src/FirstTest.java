@@ -1,5 +1,7 @@
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
+import org.apache.commons.lang3.ArrayUtils;
+import org.eclipse.jetty.util.ArrayUtil;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -13,6 +15,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -32,9 +35,8 @@ public class FirstTest {
         capabilites.setCapability("automationName", "Appium");
         capabilites.setCapability("appPackage", "org.wikipedia");
         capabilites.setCapability("appActivity", ".main.MainActivity");
-        capabilites.setCapability("app", "/Users/apalnov/Desktop/Auto Mobile/Lesson-3/Lesson_project/JavaAppiumAutomation/apks/org.wikipedia.apk"); // MacOS
-        // capabilites.setCapability("app","E:\\Auto Mobile\\Lesson-2\\JavaAppiumAutomation\\apks\\org.wikipedia.apk"); // Windows
-
+        // capabilites.setCapability("app", "/Users/apalnov/Desktop/Auto Mobile/Lesson-3/Lesson_project/JavaAppiumAutomation/apks/org.wikipedia.apk"); // MacOS
+        capabilites.setCapability("app","E:\\Auto Mobile\\Lesson-3\\Task-3\\JavaAppiumAutomation\\apks\\org.wikipedia.apk"); // Windows
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilites);
     }
 
@@ -47,8 +49,8 @@ public class FirstTest {
     @Test
     public void testSearchResultCheck() {
 
-        String searchString = "Naval";
-        int resultCount = 0; // Для хранения результата сравнения элемента списка с искомой строкой
+        String searchString = "Arsenal";  // Тест проходит если искать по строке "Naval"
+        int resultCount = 0; // Для хранения количественного результата сравнения элемента списка с искомой строкой
         int resultsFound; // Для хранения количества полученных результатов
 
         waitForElementAndClick(
@@ -69,43 +71,50 @@ public class FirstTest {
 
         ArrayList<WebElement> elementsHeader = searchForElements(By.id("org.wikipedia:id/page_list_item_title"));
         ArrayList<WebElement> elementsText = searchForElements(By.id("org.wikipedia:id/page_list_item_description"));
+        resultsFound = elementsHeader.size();
 
-/*        System.out.println("Search returned: " + elementsHeader.size() + " articles with following headers");
+        // Извлечение текста из элементов header и text
+        String[] elementsHeaderT = new String[resultsFound];
+        String[] elementsTextT = new String[resultsFound];
+
+        int iHeaders = 0;
 
         for(WebElement element : elementsHeader) {
 
             String title = element.getText();
-            System.out.println(title);
+            elementsHeaderT[iHeaders] = title;
+            iHeaders++;
         }
 
-        System.out.println("\nSearch returned: " + elementsText.size() + " articles with following text");
+        int iText = 0;
 
         for(WebElement element : elementsText) {
 
             String title = element.getText();
-            System.out.println(title);
+            elementsTextT[iText] = title;
+            iText++;
         }
-*/
 
-        resultsFound = elementsHeader.size();
-        int[] headerNumbers = new int[resultsFound];
+        // Проверка вхождения искомой строки
+        for(int i = 0; i < resultsFound; i++) {
 
-        for(WebElement element : elementsHeader) {
+            String title = elementsHeaderT[i];
+            String text = elementsTextT[i];
+            String searchStringU = searchString.toLowerCase();
 
-            String title = element.getText();
-            int titleIndex = elementsHeader.indexOf(title);
             if (title.indexOf(searchString) == -1) {
-                System.out.println(title); }
-            else {
-                resultCount++;
+                System.out.println("Header does not contain search string: " + title);
+                if (text.indexOf(searchStringU) == -1) {
+                    System.out.println("Text does not contain search string: " + text);
+                }
+                else { resultCount++; }
             }
+            else { resultCount++; }
         }
 
+        // Анализ результата
         if (resultCount == resultsFound) {System.out.println("All found headers contain search string");}
-        else {
-            System.out.println(resultCount + " headers of " + resultsFound + " contain search string");
-            Assert.fail("\nNot all headers contain search string");
-        }
+        else {Assert.fail("\nNot all headers or text contain search string");}
 
 }
 
@@ -167,10 +176,5 @@ public class FirstTest {
         ArrayList<WebElement> result = new ArrayList<WebElement>(elements);
         return result;
     }
-
-    public static boolean equals(String str1, String str2) {
-        return str1 == null ? str2 == null : str1.equals(str2);
-    }
-
 
 }
